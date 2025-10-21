@@ -2,36 +2,58 @@ import AppName from "./components/AppName";
 import AddTodo from "./components/AddTodo";
 import TodoItems from "./components/TodoItems";
 import WelcomeMessage from "./components/WelcomeMessage";
-import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addItemToServer, deleteItemFromServer, getItemFromServer } from "./services/itemService";
 
 function App() {
   const [todoItems, setTodoItems] = useState([]);
 
-  const handleNewItem = (itemName, itemDueDate) => {
+  useEffect(() => {
+    getItemFromServer().then(initialItems => {
+      setTodoItems(initialItems);
+    });
+  }, []);
+
+  const handleNewItem = async (itemName, itemDueDate) => {
     console.log(`New Item Added: ${itemName} Date:${itemDueDate}`);
+    const item = await addItemToServer(itemName, itemDueDate);
     const newTodoItems = [
       ...todoItems,
-      { name: itemName, dueDate: itemDueDate },
+      item,
     ];
     setTodoItems(newTodoItems);
   };
 
-  const handleDeleteItem = (todoItemName) => {
-    const newTodoItems = todoItems.filter((item) => item.name !== todoItemName);
+  const handleDeleteItem = async (id) => {
+    const deletedId = await deleteItemFromServer(id);
+    const newTodoItems = todoItems.filter((item) => item.id !== deletedId);
     setTodoItems(newTodoItems);
   };
 
+  const handleToggleComplete = async (id) => {
+    const updatedTodoItems = todoItems.map((item) => {
+      if (item.id === id) {
+        return { ...item, completed: !item.completed };
+      }
+      return item;
+    });
+    setTodoItems(updatedTodoItems);
+    // Add API call here if you want to persist the completion state
+  };
+
   return (
-    <center className="todo-container">
-      <AppName />
-      <AddTodo onNewItem={handleNewItem} />
-      {todoItems.length === 0 && <WelcomeMessage></WelcomeMessage>}
-      <TodoItems
-        todoItems={todoItems}
-        onDeleteClick={handleDeleteItem}
-      ></TodoItems>
-    </center>
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <AppName />
+        <AddTodo onNewItem={handleNewItem} />
+        {todoItems.length === 0 && <WelcomeMessage />}
+        <TodoItems
+          todoItems={todoItems}
+          onDeleteClick={handleDeleteItem}
+          onToggleComplete={handleToggleComplete}
+        />
+      </div>
+    </div>
   );
 }
 
