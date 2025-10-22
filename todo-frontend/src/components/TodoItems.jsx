@@ -1,59 +1,55 @@
 import TodoItem from "./TodoItem";
-import styles from "./TodoItems.module.css";
 
-function TodoItems({ todoItems, onDeleteClick, onToggleComplete }) {
-  const incompleteTasks = todoItems
-    .filter((item) => !item.completed)
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-  const completedTasks = todoItems
-    .filter((item) => item.completed)
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+const TodoItems = ({ todoItems, onDeleteClick, onToggleComplete }) => {
+  // Group items by completion status
+  const pendingItems = todoItems.filter((item) => !item.completed);
+  const completedItems = todoItems.filter((item) => item.completed);
 
   return (
-    <div className="space-y-4">
-      {/* Incomplete Tasks Section */}
-      {incompleteTasks.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            Tasks To Do
+    <div>
+      {pendingItems.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-700 mb-3">
+            Tasks to Do
           </h2>
-          {incompleteTasks.map((item) => (
-            <TodoItem
-              key={item.id}
-              id={item.id}
-              todoDate={item.dueDate}
-              todoName={item.name}
-              completed={item.completed}
-              onDeleteClick={onDeleteClick}
-              onToggleComplete={onToggleComplete}
-            />
-          ))}
+          <div className="space-y-3">
+            {pendingItems.map((item) => (
+              <TodoItem
+                key={item.id}
+                id={item.id}
+                todoDate={item.dueDate}
+                todoName={item.name}
+                completed={item.completed}
+                onDeleteClick={onDeleteClick}
+                onToggleComplete={onToggleComplete}
+              />
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Separator and Completed Tasks Section */}
-      {completedTasks.length > 0 && (
-        <div className="mt-8">
-          <div className="border-t-2 border-gray-200 mb-6"></div>
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+      {completedItems.length > 0 && (
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-500 mb-3">
             Completed Tasks
           </h2>
-          {completedTasks.map((item) => (
-            <TodoItem
-              key={item.id}
-              id={item.id}
-              todoDate={item.dueDate}
-              todoName={item.name}
-              completed={item.completed}
-              onDeleteClick={onDeleteClick}
-              onToggleComplete={onToggleComplete}
-            />
-          ))}
+          <div className="space-y-3">
+            {completedItems.map((item) => (
+              <TodoItem
+                key={item.id}
+                id={item.id}
+                todoDate={item.dueDate}
+                todoName={item.name}
+                completed={item.completed}
+                onDeleteClick={onDeleteClick}
+                onToggleComplete={onToggleComplete}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default TodoItems;

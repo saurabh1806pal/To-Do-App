@@ -1,6 +1,6 @@
 function AppName() {
   return (
-    <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
+    <h1 className="text-3xl font-bold text-center text-indigo-600 mb-6">
       TODO App
     </h1>
   );

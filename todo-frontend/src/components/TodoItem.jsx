@@ -1,31 +1,54 @@
-function TodoItem({ id, todoName, todoDate, completed, onDeleteClick, onToggleComplete }) {
+function TodoItem({
+  id,
+  todoName,
+  todoDate,
+  completed,
+  onDeleteClick,
+  onToggleComplete,
+}) {
+  // Format the date to show only the date part (YYYY-MM-DD)
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
-    <div className={`flex items-center justify-between bg-white p-4 rounded-lg shadow mb-4 ${completed ? 'opacity-70' : ''}`}>
-      <div className="flex items-center space-x-4 flex-1">
+    <div
+      className={`flex flex-col sm:flex-row items-center justify-between p-4 mb-3 rounded-lg border ${
+        completed ? "bg-gray-50 border-gray-200" : "bg-white border-gray-200"
+      } shadow-sm hover:shadow-md transition-shadow`}
+    >
+      <div className="flex items-center mb-2 sm:mb-0 sm:flex-1">
         <input
           type="checkbox"
           checked={completed}
           onChange={() => onToggleComplete(id)}
-          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          className="w-5 h-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 mr-3"
         />
-        <h3 className={`text-lg font-medium ${completed ? 'line-through text-gray-500' : ''}`}>
+        <span
+          className={`text-gray-700 font-medium ${
+            completed ? "line-through text-gray-500" : ""
+          }`}
+        >
           {todoName}
-        </h3>
+        </span>
       </div>
-      <div className="flex-1">
-        <p className="text-gray-600">{formatDate(todoDate)}</p>
+      <div className="text-gray-500 mb-2 sm:mb-0 sm:w-1/3">
+        {formatDate(todoDate)}
       </div>
-      <button
-        onClick={() => onDeleteClick(id)}
-        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-      >
-        Delete
-      </button>
+      <div>
+        <button
+          type="button"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+          onClick={() => onDeleteClick(id)}
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

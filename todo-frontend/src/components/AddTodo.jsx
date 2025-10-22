@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 function AddTodo({ onNewItem }) {
-  const [todoName, setTodoName] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [todoName, setTodoName] = useState();
+  const [dueDate, setDueDate] = useState();
 
   const handleNameChange = (event) => {
     setTodoName(event.target.value);
@@ -13,36 +13,41 @@ function AddTodo({ onNewItem }) {
   };
 
   const handleAddButtonClicked = () => {
-    if (todoName && dueDate) {
-      onNewItem(todoName, dueDate);
-      setDueDate("");
-      setTodoName("");
-    }
+    onNewItem(todoName, dueDate);
+    setDueDate("");
+    setTodoName("");
   };
 
   return (
-    <div className="flex gap-4 mb-8 items-center justify-center">
-      <input
-        type="text"
-        placeholder="Enter Todo Here"
-        value={todoName}
-        onChange={handleNameChange}
-        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        type="date"
-        value={dueDate}
-        onChange={handleDateChange}
-        min={new Date().toISOString().split('T')[0]}
-        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        type="button"
-        onClick={handleAddButtonClicked}
-        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
-      >
-        Add
-      </button>
+    <div className="mb-8">
+      <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="Enter Todo Here"
+            value={todoName}
+            onChange={handleNameChange}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          />
+        </div>
+        <div className="sm:w-1/3">
+          <input
+            type="date"
+            value={dueDate}
+            onChange={handleDateChange}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          />
+        </div>
+        <div>
+          <button
+            type="button"
+            className="w-full sm:w-auto px-5 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+            onClick={handleAddButtonClicked}
+          >
+            Add
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

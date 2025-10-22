@@ -1,6 +1,8 @@
-const express = require('express');
+// External Module
+const express = require("express");
 const todoItemsRouter = express.Router();
 
+// Local Module
 const todoItemsController = require("../controllers/todoItemsController");
 
 todoItemsRouter.get("/", todoItemsController.getTodoItems);
